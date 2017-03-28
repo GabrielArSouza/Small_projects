@@ -1,6 +1,6 @@
 #Algoritmos de Ordenação
 
-Desenvolvido por: Gabriel Araújo de Souza
+Desenvolvido por: Gabriel Araújo de Souza, 
 E-mail: gabriel_feg@hotmail.com
 
 Este programa possui vários algoritmos de ordenação implementados,
@@ -9,5 +9,5 @@ o programa possa ordená-lo por meio de diferentes algoritmos.
 
 O programa utiliza técnicas de programação abstrata.
 
->>>aceito sugestões de outros programadores<<<
+Aceito sugestões de outros programadores
 
