@@ -1,3 +1,3 @@
 # Small_projects
 
-Pequenos projetos sobre disciplinas aleatórias.
+Pequenos projetos sobre assuntos aleatórias.
