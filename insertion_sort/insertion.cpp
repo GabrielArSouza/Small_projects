@@ -82,7 +82,7 @@ void selection_sort (int A[], int len)
 
 int compara( int a, int b)
 {
-	return b-a;
+	return a-b;
 }
 
 void bubble_sort (int A[], int len, int (*compara) (int, int))
@@ -94,7 +94,7 @@ void bubble_sort (int A[], int len, int (*compara) (int, int))
 		troca = false;
 		for (auto i(0); i < len-1; ++i)
 		{
-			if (compara(A[i], A[i+1]) < 0)
+			if (compara(A[i], A[i+1]) > 0)
 			{
 				std::swap(A[i], A[i+1]);
 				troca = true;
