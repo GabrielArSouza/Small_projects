@@ -80,6 +80,30 @@ void selection_sort (int A[], int len)
 	}
 }
 
+int compara( int a, int b)
+{
+	return b-a;
+}
+
+void bubble_sort (int A[], int len, int (*compara) (int, int))
+{
+	bool troca = true;
+
+	while (troca)
+	{
+		troca = false;
+		for (auto i(0); i < len-1; ++i)
+		{
+			if (compara(A[i], A[i+1]) < 0)
+			{
+				std::swap(A[i], A[i+1]);
+				troca = true;
+			}
+		}
+	}
+
+}
+
 int main()
 {
     // Vetor de teste.
@@ -96,7 +120,7 @@ int main()
     std::cout << "Vetor original\n";
     print(A, len);
 
-    selection_sort( A, len );
+    bubble_sort( A, len, compara);
 
     std::cout << "Vetor ordenado\n";
     print(A, len);
