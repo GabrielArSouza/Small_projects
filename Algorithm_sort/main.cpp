@@ -23,9 +23,10 @@ int main (int argc, char *argv[])
 
 	//ponteiros para as funções
 	SortFuncType SortsAlgo[]{
-		//insertion_sort,
+		insertion_sort,
 		selection_sort,
-		bubble_sort
+		bubble_sort,
+		quick_sort_controller
 	};
 
 	//Informações de erro e atribuição de variáveis
@@ -37,14 +38,16 @@ int main (int argc, char *argv[])
 		std::cout << ">>> ./bin [f]"<< std::endl;
 		std::cout << std::endl;
 		std::cout << "[f]:" << std::endl;
-		std::cout << "0 - Selection sort" << std::endl;
-		std::cout << "1 - Bubble sort" << std::endl;
+		std::cout << "0 - Insertion sort" << std::endl;
+		std::cout << "1 - Selection sort" << std::endl;
+		std::cout << "2 - Bubble sort" << std::endl;
+		std::cout << "3 - Bubble sort" << std::endl;
 
 		return EXIT_FAILURE;
 	}else {
 		std::stringstream(argv[1]) >> TypeFunc;
 	}
-
+	std::cout << TypeFunc << std::endl;
 	// Vetor de teste.
     int A[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 
@@ -60,7 +63,7 @@ int main (int argc, char *argv[])
     print(A, len);
 
     (SortsAlgo[TypeFunc])( A, len);
-
+    
     std::cout << "Vetor ordenado\n";
     print(A, len);
 
