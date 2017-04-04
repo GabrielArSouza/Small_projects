@@ -73,6 +73,12 @@ bool eh_par( const void * e )
     return ( (*x)%2 == 0 );
 }
 
+bool is_positive(const void * value)
+{
+    const int * v = (const int *) value;
+    return *v > 0;
+}
+
 int main( void )
 {
 #ifdef NOT_IMPLEMENTED
@@ -93,6 +99,26 @@ int main( void )
             << std::endl;
     }
 #endif
+
+    // Testando Partition
+    {
+        int A[] = { 2, -3, 4, 8, -5, 8, 7 };
+
+        std::cout << ">>> Array A: [";
+        graal::transform( std::begin(A), std::end(A), sizeof(int), imprimir_int );
+        std::cout << "]\n";
+
+        auto first_negatives = graal::partition( std::begin(A), std::end(A), sizeof(int), is_positive);
+
+        std::cout << ">>> Partition negative: [";
+        graal::transform( first_negatives, std::end(A), sizeof(int), imprimir_int );
+        std::cout << "]\n";
+
+        std::cout << ">>> Partition positive: [";
+        graal::transform(  std::begin(A), first_negatives, sizeof(int), imprimir_int );
+        std::cout << "]\n";
+
+    }
 
     // Testando find()
     {

@@ -3,6 +3,7 @@
 
 namespace graal {
     using byte = unsigned char;
+    
 
     void transform( void *first, void *last, std::size_t size, void (*func) ( void * ) )
     {
@@ -33,4 +34,27 @@ namespace graal {
 
         return last;  // return l; return f;
     }
+
+    void * partition ( void * first , void * last , std::size_t size ,
+                       Predicate p )
+    {
+        byte *f = ( byte * ) first;
+        byte *l = ( byte * ) last;
+        auto slow(f);
+        byte aux[ size ];
+
+        while ( f != l )
+        {
+            if ( p( f ) )//predicado satisfeito
+            {
+                //trocar o slow 
+                memcpy(aux, f, size);
+                memcpy(f, slow, size);
+                memcpy(slow, aux, size);
+                slow += size; // TEM Q SALTAR DE BYTES E BYTES
+            }
+            f += size; // tamanho do elemento
+        }
+        return slow;
+   }
 }
