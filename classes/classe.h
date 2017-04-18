@@ -13,7 +13,11 @@ class Point3d
 	public:
 		void setvalues ( float x, float y, float z );		
 
-		void print ( void ) const;		
+		void print ( void ) const;	
+
+		bool isEqual ( const Point3d &p2 ) const;	
+
+		bool operator==(const Point3d & ) const;
 
 };
 
