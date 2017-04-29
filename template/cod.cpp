@@ -14,7 +14,7 @@ binary_search( T * first, T * last, T target )
 	{
 		auto d = std::distance(f, l);
 		auto t = d/sizeof(T);
-		m = f + t;
+		m = f + t/2;
 
 		if ( *m == target ) return true;
 		else if ( *m > target ) l = m - 1;
