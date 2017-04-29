@@ -54,11 +54,11 @@ Para estas instruções funcionarem, começe da pasta raiz, que contém App e gr
 
 2. Copie agora o cabeçalho que descreve as funções `graal`.
 
-    `$ cp ../graal/include/graal.h include/`
+    `$ cp ../graal/includes/graal.h includes/`
 
 3. Compilando o programa principal.
 
-    `$ g++ -Wall -std=c++11 src/drive_graal.cpp -I include -L lib -l graal -o build/drive_graal`
+    `$ g++ -Wall -std=c++11 src/drive_graal.cpp -I includes -L lib -l graal -o build/drive_graal`
 
     Este comando compila e liga o código objeto da aplicação com a biblioteca
     desenvolvida por outro programador.
