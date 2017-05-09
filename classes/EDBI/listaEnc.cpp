@@ -69,6 +69,60 @@ size_t count( const Node * h )
 	}
 	return cont;
 }
+//dicas importantes 
+bool push_front ( Node * & head_, int value_)
+{
+	// criar novo nó com o valor
+	Node *temp(nullptr);
+	try 
+	{
+		Node *temp = new Node( value_, nullptr);
+	}
+	catch ( std::bad_alloc & e)
+	{
+		return false;
+	}
+	
+	// apontar para o primeiro valor da lista
+	temp->next = head_;
+	//fazer o head apontar para o novo elemento
+	head_ = temp;
+
+	return true;
+}
+
+void clear ( Node * & head_)
+{
+	Node * current( head_ );
+
+	while( current != nullptr )
+	{
+		auto condenado( current );
+		current = current->next;
+		delete condenado;
+	}
+}
+
+// int * get_data( const Node * head_, size_t & len_)
+// {
+// 	//recuperar o tamanho da lista
+// 	len_ = length ( head_ );
+
+// 	//alocar 
+// 	int * data = new int [];
+
+// 	//atualizar o comprimento do vetor.
+// 	len_ =;
+
+// 	//copiar os dados da lista para o vetor 
+// 	auto i(0u);
+// 	while ( head_ != nullptr )
+// 	{
+// 		data[i++] = head_->data;
+// 		head_ = head_->next;
+// 	}
+// } 
+
 
 int main ()
 {
@@ -81,5 +135,21 @@ int main ()
 
 	size_t len = count(head);
 	assert( len == 3 );
+
+	// {
+	// 	Node * head(nullptr);
+	// 	head = build123();
+
+	// 	size_t v1_len;
+	// 	//auto v1_data = get_data( head, v1_len);
+	// 	// int expected[] = {1, 2, 3};
+	// 	// for ( auto i(0); i < v1_len)
+
+	// 	push_front( head, 4);
+
+	// 	Node * head2(nullptr);
+	// }
+
+
 	return 0;
 }
