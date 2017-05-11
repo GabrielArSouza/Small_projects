@@ -123,6 +123,30 @@ void clear ( Node * & head_)
 // 	}
 // } 
 
+Node * find ( const Node * head_, int value_ )
+{
+	const Node * result( nullptr );
+
+	// Lista vazia
+	//if ( head_ == nullptr ) return result;
+
+	// Lista com o target no 1ro nó.
+	//if ( head_->data == value_ ) return result;
+
+	// Caminhar na lista mantendo o result um passo atrasado.
+	while ( work->next != nullptr )
+	{
+		if ( head_->data == value_ ) return result;
+		result = head_;
+		head_ = head_->next;
+	}
+
+	// Determinar qual o motivo que quebrou o laço.
+	
+
+	return result;
+
+}
 
 int main ()
 {
@@ -149,6 +173,55 @@ int main ()
 
 	// 	Node * head2(nullptr);
 	// }
+	// Testando find
+	{
+		Node * head(nullptr);
+		// Lista Vazia
+		assert( find (head,2) == nullptr);
+
+		// Lista com 1 elemento
+		Node *head2 = build123();
+		assert( find( head2, 1) == nullptr);
+
+		// Busca pelo segundo
+		auto result = find( head2,2);
+		assert( result->data == 1);
+
+		// Busca pelo Ultimo
+		result = find( head2, 3);
+		assert( result->data == 2);
+
+		//Busca de um elemento inexistente em uma lista de 3 nós
+		assert ( find( head2, 5) == nullptr);
+		
+	}
+	//Testando o remove
+	{
+		//caso a) lista vazia.
+		int value(0);
+		Node * head( nullptr );
+		remove( head, head, value );
+		assert( head == nullptr);
+
+		//caso b) Lista com 1 elemeto a ser removido
+		push_front( head, 1 );
+		Node * ante( nullptr );
+		remove( head, ante, value );
+		assert( value == 1);
+		assert( empty( head ) == true );
+
+		//caso c1)
+		clear( head );
+		head = build123();
+		remove( head, find( head,1), value);
+		assert ( value == 1 ); 
+
+		int expected[] = {2, 3};
+		size_t v1_len;
+		auto v1_data = get_data( head, v1_len );
+		assert( verify( v1_data, v1_len, expected, 2) );
+
+	}
 
 
 	return 0;

@@ -82,7 +82,6 @@ bool insert( SNPtr & _pAIL, SNPtr _pAnte, int _newVal )
     return true;
 }
 
-
 bool remove( SNPtr & _pAIL, SNPtr _pAnte, int & _retrievedVal )
 {
     return true;
