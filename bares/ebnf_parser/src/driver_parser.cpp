@@ -15,7 +15,8 @@ std::vector<std::string> expressions =
     "+12",
     "1.3 * 4",
     "a + 4",
-    "       "
+    "       ",
+    "3 +    08 + 1"
 };
 
 void print_msg( const Parser::ParserResult & result, std::string str )

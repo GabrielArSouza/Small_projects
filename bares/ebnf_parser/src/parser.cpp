@@ -49,7 +49,7 @@ void Parser::next_symbol( void )
 bool Parser::peek( terminal_symbol_t c_ ) const
 {
     // 
-    return ( not end_input ) and lexer( *it_curr_symb ) == c;
+    return ( not end_input() ) and lexer( *it_curr_symb ) == c_;
 }
 
 /// Tries to match the current character to a symbol passed as argument.
@@ -78,9 +78,9 @@ bool Parser::expect( terminal_symbol_t c_ )
 void Parser::skip_ws( void )
 {
     // TODO
-    while ( not end_input() and 
-            (lexer( *it_curr_symb ) == Parser::terminal_symbol_t::TS_WS) or
-             lexer( *it_curr_symb ) == Parser::terminal_symbol_t::TS_TAB ) )
+    while ( (not end_input()) and 
+            ((lexer( *it_curr_symb ) == Parser::terminal_symbol_t::TS_WS) or
+             (lexer( *it_curr_symb ) == Parser::terminal_symbol_t::TS_TAB )) )
     {
         next_symbol();
     }
@@ -125,25 +125,24 @@ Parser::ParserResult Parser::expression()
         {
             // Token "+", Operator
             token_list.push_back( 
-                Token(token_str(terminal_symbol_t::TS_PLUS), Token:token_t::OPERATOR));
+                Token(token_str(terminal_symbol_t::TS_PLUS), Token::token_t::OPERATOR));
         }
         else if ( expect(terminal_symbol_t::TS_MINUS))
         {
             // Token "-", Operator
             token_list.push_back( 
-                Token(token_str(terminal_symbol_t::TS_MINUS), Token:token_t::OPERATOR));
+                Token(token_str(terminal_symbol_t::TS_MINUS), Token::token_t::OPERATOR));
         }else
         {
-            return ParserResult( ParserResult::EXTRANEOUS_SYMBOL,
-                                std::distance(expr.begin(), it_curr_symb));
+            return result;
         }
 
         result = term();
-        if ( result.type != ParserResult::PARSER_OK)
+        if  (result.type != ParserResult::PARSER_OK )
         {
             result.type = ParserResult::MISSING_TERM;
-            return result;
         }
+        
     }
 
     return result;
@@ -152,31 +151,55 @@ Parser::ParserResult Parser::expression()
 Parser::ParserResult Parser::term()
 {
     // TODO
-    return ParserResult( ParserResult::PARSER_OK ); // Stub
+    skip_ws();
+    auto begin_token( it_curr_symb);
+    auto result = integer();
+
+    std::string op;
+    std::string::iterator it;
+    it = op.begin();
+    op.insert(it, begin_token, it_curr_symb); 
+    token_list.push_back( Token(op, Token::token_t::OPERAND));
+    // std::cout << op << std::endl;
+    return result;
 }
 
 Parser::ParserResult Parser::integer()
 {
-    // TODO
-    return ParserResult( ParserResult::PARSER_OK ); // Stub
+    if ( lexer( *it_curr_symb ) == terminal_symbol_t::TS_ZERO )
+    {
+        return ParserResult( ParserResult::PARSER_OK );
+    } 
+
+    //tratar o '-'
+    accept( terminal_symbol_t::TS_MINUS );
+    return natural_number();
+    
 }
 
 Parser::ParserResult Parser::natural_number()
 {
     // TODO
-    return ParserResult( ParserResult::PARSER_OK ); // Stub
+    if ( digit_excl_zero() )
+    {
+        while( digit() ) /*empty*/;
+
+        return ParserResult( ParserResult::PARSER_OK );
+    }
+
+    return ParserResult( ParserResult::ILL_FORMED_INTEGER, std::distance(expr.begin(), it_curr_symb));
 }
 
-Parser::ParserResult Parser::digit_excl_zero()
+bool Parser::digit_excl_zero()
 {
     // TODO
-    return ParserResult( ParserResult::PARSER_OK ); // Stub
+    return accept( terminal_symbol_t::TS_NON_ZERO_DIGIT );
 }
 
-Parser::ParserResult Parser::digit()
+bool Parser::digit()
 {
-    // TODO
-    return ParserResult( ParserResult::PARSER_OK ); // Stub
+   return ( accept( terminal_symbol_t::TS_ZERO) or 
+            accept( terminal_symbol_t::TS_NON_ZERO_DIGIT) );  
 }
 
 /*!
@@ -207,6 +230,13 @@ Parser::parse( std::string e_ )
 
     // tentar validar a expressão
     result = expression();
+
+    if ( result.type == ParserResult::PARSER_OK)
+    {
+        skip_ws();
+        if (not end_input())
+            return ParserResult( ParserResult::EXTRANEOUS_SYMBOL, std::distance(expr.begin(), it_curr_symb));
+    }
     return result;
 }
 

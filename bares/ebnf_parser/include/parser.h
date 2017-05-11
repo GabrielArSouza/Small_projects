@@ -5,6 +5,10 @@
 #include <iterator> // std::distance()
 #include <vector>   // std::vector
 #include <sstream>  // std::istringstream
+#include <stdexcept>
+#include <string>
+#include <algorithm>
+
 
 #include "token.h"  // struct Token.
 
@@ -107,8 +111,8 @@ class Parser
         ParserResult term();
         ParserResult integer();
         ParserResult natural_number();
-        ParserResult digit_excl_zero();
-        ParserResult digit();
+        bool digit_excl_zero();
+        bool digit();
 };
 
 #endif
