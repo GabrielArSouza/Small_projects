@@ -87,7 +87,7 @@ class MyBidirectionalIterator
          */
         self_type operator++()
         {
-            m_ptr++;
+            m_ptr = m_ptr->next;
             return *this;
         }
 
@@ -97,7 +97,7 @@ class MyBidirectionalIterator
         self_type operator++(int)
         {
             self_type temp = *this;
-            m_ptr++;
+            m_ptr = m_ptr->next;
             return temp;
         }
 
@@ -106,7 +106,7 @@ class MyBidirectionalIterator
          */
         self_type operator--()
         {
-            m_ptr--;
+            m_ptr = m_ptr->prev;
             return *this;
         }
 
@@ -116,7 +116,7 @@ class MyBidirectionalIterator
         self_type operator--(int)
         {
             self_type temp = *this;
-            m_ptr--;
+            m_ptr = m_ptr->prev;
             return temp;
         }
 
@@ -143,7 +143,11 @@ class MyBidirectionalIterator
         self_type operator-=(  difference_type step_ ) ;
 
         /// it->method()
-        pointer operator->( void ) const ;
+        pointer operator->( void ) const
+        {
+            assert( m_ptr );
+            return *m_ptr;
+        }
 
         /// it1 - it2
         difference_type operator-( const self_type & rhs_ ) const ;
@@ -209,6 +213,21 @@ class list
             clear(); //apaga os nós da lista.
             delete m_head;
             delete m_tail;
+        }
+
+        iterator begin() 
+        {
+            return iterator ( m_head->next );
+        }
+
+        iterator end()
+        {
+            return iterator ( m_tail );
+        }
+
+        iterator insert( iterator it_, const T & value_ )
+        {
+            
         }
     // Public interface.
     
