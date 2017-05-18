@@ -16,6 +16,13 @@
  * \date May, 2nd 2017.
  * \author Selan R. dos Santos
  */
+//Forward declaration
+//aviso que no futuro existirá uma classe chamada list 
+
+namespace ls{
+
+template < typename T >
+    class list;
 
 template <typename T>
 class MyBidirectionalIterator
@@ -152,6 +159,8 @@ class MyBidirectionalIterator
         /// it1 - it2
         difference_type operator-( const self_type & rhs_ ) const ;
 
+        friend class list<typename T::value_type >;
+
 };
 
 /// A simple version of a dynamic array that stores integers.
@@ -210,7 +219,7 @@ class list
 
         ~list()
         {
-            clear(); //apaga os nós da lista.
+            //clear(); //apaga os nós da lista.
             delete m_head;
             delete m_tail;
         }
@@ -225,40 +234,108 @@ class list
             return iterator ( m_tail );
         }
 
+        const_iterator cbegin() 
+        {
+            return const_iterator ( m_head->next );
+        }
+
+        const_iterator cend()
+        {
+            return const_iterator ( m_tail );
+        }
+
         iterator insert( iterator it_, const T & value_ )
+        {
+            //1 alocar o nó new_node
+            //2a new_node->next = it ( next do novo nó recebe it )
+            // b new_node->prev = it->prev ( prev do novo nó recebe o prev do it )
+            //3a (it->prev)->next = new_node ( o next do prev do it recebe novo nó )
+            // b it->prev = new_node ( prev do iterador recebe novo nó )
+
+            //(1) Alocar o novo nó
+            node_t *new_node = new_node_t( value_ );
+
+            //(2) Conectar o nó a nova lista
+            new_node->next = it_.m_ptr;
+            new_node->prev = it_->prev;
+
+            //(3) Fazer a lista reconhecer o nó
+            (it_->prev)->next = new_node; //o next anterior aponta para o novo nó
+            it_->prev = new_node;
+
+            //(4) Incrementar o contador de elementos
+            m_len++;
+
+            return iterator( new_node );
+        }
+
+         iterator erase( iterator it_ )
+        {
+            //TODO
+            if ( it_ == end() ) return it_;
+
+            auto before( it->prev );
+            auto after( it->next );
+
+            //(1) bypass o nó a ser removido
+            before->next = after;
+            after->prev = before;
+
+            //(2) remover o nó marcado
+            delete it_.m_ptr;
+
+            return iterator( after );
+        }
+
+        bool empty()
         {
             
         }
+
+        void push_front( const T & value_ )
+        {
+            insert ( begin(), value_ );
+        }
+
+        void push_back( const T & value_ )
+        {
+            insert( end(), value_ );
+        }
+
+        void pop_front( )
+        {
+            erase ( begin() );
+        }
+
+        void pop_back()
+        {
+            erase ( --end() );
+        }
+
+
+
+        friend std::ostream & operator<< ( std::ostream & os_, const ls::list<T> & l_ )
+        {
+            os_ << "[ ";
+            for ( auto it( l_.cbegin() ); it != l_.cend(); ++it)
+                os_ << *it << " ";
+            os_ << "]";
+
+            return os_;
+        }
+
+       
     // Public interface.
     
 };
 
+}
+
 // The vector/iterator driver.
 int main( void )
 {
-    VectorInt v(10); // Criar um vector com 10 elementos
-    VectorInt::iterator it = v.begin();
+    ls::list< int > v;
+    //for ( )
 
-    for( auto i(0) ; i < 10 ; ++i )
-        v.push_back( i+1 );
-
-    for ( auto cit (v.cbegin()); cit != v.cend() ; ++cit )
-        std::cout << *cit << " ";
-    std::cout << std::endl;
-
-    std::cout << ">>> begin() = " << *it << "\n";
-
-    std::cout << ">>> Array: [";
-    std::copy( v.begin(), v.end(), std::ostream_iterator<int>(std::cout, " ") );
-    std::cout << "]\n";
-
-    it++;
-    std::cout << ">>> begin()+1 = " << *it << "\n";
-    /*
-     // THIS DOES NOT WORK!!
-     int * ptr = v.m_data;
-     *ptr = 10;
-     ptr++;
-    */
     return 0;
 }
